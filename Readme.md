@@ -14,5 +14,5 @@ Download *export_channels.py* and install it through the addon manager of blende
 
 # Todo
 
-- [ ] Select compression [ Currently each channel is compressed via DWAA (Exept the Cryptomatte)]
+- [x] Select compression [ Currently each channel is compressed via DWAA (Exept the Cryptomatte)]
 - [ ] Subfolders! Let the user decide if he wants to create millions of subfolders!
