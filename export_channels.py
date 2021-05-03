@@ -49,7 +49,8 @@ class CreateNodes(bpy.types.Operator):
         BASE_PATH = context.scene.sEXR_base_path
         NAME_TAG = "sEXR_"
         scene = context.scene        
-
+        node_tree = scene.node_tree
+        
         # Enable compositing nodes
         scene.use_nodes = True
         scene.render.use_compositing = True
