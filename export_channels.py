@@ -11,8 +11,27 @@ bl_info = {
 }
 
 import bpy
-#scene = bpy.context.scene
-#node_tree = scene.node_tree
+
+class SingleEXRProperties(bpy.types.PropertyGroup):
+    """ Stores all Properties  """
+    base_path : bpy.props.StringProperty(name="Output Folder",
+                                    description="Export location",
+                                    default="//render/",
+                                    maxlen=1024,
+                                    subtype="FILE_PATH") 
+                                    
+    codecs = [('ZIP','Zip','',0,0),
+             ('PIZ','Piz','',0,1),
+             ('DWAA','DWAA (Lossy)','',0,2)]
+    codec : bpy.props.EnumProperty(items=codecs,
+                                    name="Codec",
+                                    default='DWAA')
+    depths = [('16', 'Float (Half)', ''),
+               ('32', 'Float (Full)', '')]
+               
+    color_depth : bpy.props.EnumProperty(items=depths,
+                                         name="Bit depth",
+                                         default='16')
 
 class SingleEXRPanel(bpy.types.Panel):
     """Creates a Panel in the output properties window"""
@@ -119,20 +138,19 @@ class CreateNodes(bpy.types.Operator):
         return {'FINISHED'}
 
 classes =(CreateNodes,
-            SingleEXRPanel)
+          SingleEXRPanel,
+          SingleEXRProperties)
 
 def register():
     for cls in classes:
         bpy.utils.register_class(cls)
-    bpy.types.Scene.sEXR_base_path = bpy.props.StringProperty(name="Output Folder",
-                                    description="Export location",
-                                    default="//render/",
-                                    maxlen=1024,
-                                    subtype="FILE_PATH") 
+    bpy.types.Scene.sEXR = bpy.props.PointerProperty(type=SingleEXRProperties)
 
 def unregister():
     for cls in classes:
         bpy.utils.unregister_class(cls)
+    
+    del bpy.types.Scene.sEXR 
 
 
 if __name__ == "__main__":
