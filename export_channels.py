@@ -43,10 +43,14 @@ class SingleEXRPanel(bpy.types.Panel):
     
     def draw(self, context):
         layout = self.layout
-
+        prop_group =  context.scene.sEXR
         obj = context.object
         row = layout.row()
-        row.prop(context.scene, "sEXR_base_path")
+        row.prop(prop_group, "base_path")
+        row = layout.row()
+        row.prop(prop_group, "codec")
+        row = layout.row()
+        row.prop(prop_group, "color_depth", expand=True)
         row = layout.row()
         row.operator("s_exr.create_nodes", icon='NODETREE')
 
@@ -65,7 +69,7 @@ class CreateNodes(bpy.types.Operator):
    
     def execute(self, context):
         # Constants
-        BASE_PATH = context.scene.sEXR_base_path
+        BASE_PATH = context.scene.sEXR.base_path
         NAME_TAG = "sEXR_"
         scene = context.scene        
         
@@ -107,7 +111,8 @@ class CreateNodes(bpy.types.Operator):
 
             # Set global filetype
             file_output.format.file_format = 'OPEN_EXR'
-
+            file_output.format.exr_codec =  scene.sEXR.codec
+            file_output.format.color_depth =  scene.sEXR.color_depth
 
             # Add inputs & connect nodes
             active_outputs = []
@@ -123,8 +128,8 @@ class CreateNodes(bpy.types.Operator):
                     format = file_output.file_slots[input.name].format
                     format.file_format = 'OPEN_EXR'
                     format.color_mode = 'RGB'
-                    format.color_depth = '16' # '32'
-                    format.exr_codec = 'DWAA' # 'PIZ'
+                    format.color_depth = scene.sEXR.color_depth # '32'
+                    format.exr_codec =  scene.sEXR.codec # 'PIZ'
                     
                     # Cryptomattes need 32 bit to work properly 
                     if 'crypto' in input.name.lower():
