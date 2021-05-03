@@ -11,8 +11,8 @@ bl_info = {
 }
 
 import bpy
-scene = bpy.context.scene
-node_tree = scene.node_tree
+#scene = bpy.context.scene
+#node_tree = scene.node_tree
 
 class SingleEXRPanel(bpy.types.Panel):
     """Creates a Panel in the output properties window"""
